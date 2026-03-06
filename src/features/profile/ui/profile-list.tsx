@@ -1,0 +1,124 @@
+import {
+    Center,
+    Loader,
+    Stack,
+    Title,
+    Paper,
+    Avatar,
+    Text,
+    Group,
+    Badge,
+    Divider,
+    Grid,
+    ThemeIcon,
+} from "@mantine/core";
+import { profileQueries } from "../queries/profile-queries";
+import { Sms, Call, Location, Calendar } from 'iconsax-reactjs';
+
+export const ProfileList = () => {
+    const { data: profile, isLoading } = profileQueries.useFetchProfile();
+
+    if (isLoading) return (
+        <Center h="70vh"><Stack align="center"><Loader color="orange" size="xl" type="bars" /></Stack></Center>
+    );
+
+    if (!profile) return (
+        <Center h="70vh"><Text c="red" fz="xl" fw={700}>Профиль не найден</Text></Center>
+    );
+
+    return (
+        <div className="container">
+            <Paper
+                radius="lg"
+                p={0}
+                withBorder
+                style={{
+                    backgroundColor: 'rgba(17, 17, 17, 0.8)',
+                    backdropFilter: 'blur(10px)',
+                    borderColor: '#333',
+                    overflow: 'hidden',
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+                }}
+            >
+                <Grid gutter={0}>
+                    <Grid.Col span={{ base: 12, md: 4 }} style={{
+                        background: 'linear-gradient(135deg, #1a1a1a 0%, #000 100%)',
+                        padding: '40px',
+                        borderRight: '1px solid #333'
+                    }}>
+                        <Stack align="center" gap="xl">
+                            <div style={{ position: 'relative' }}>
+                                <Avatar
+                                    src={profile.image}
+                                    size={180}
+                                    radius={100}
+                                    style={{ border: '3px solid #ffa13b', boxShadow: '0 0 20px rgba(255, 161, 59, 0.2)' }}
+                                />
+                                <Badge
+                                    size="sm"
+                                    variant="filled"
+                                    color="orange"
+                                    style={{ position: 'absolute', bottom: 10, right: 10, border: '2px solid #000' }}
+                                >
+                                    ID: {profile.id}
+                                </Badge>
+                            </div>
+
+                            <Stack gap={5} align="center">
+                                <Title order={2} c="white" fz={28} fw={800}>{profile.username}</Title>
+                                <Text c="dimmed" fz="sm" tt="uppercase" lts={1}>Личный профиль</Text>
+                            </Stack>
+
+                            <Badge color="orange" variant="outline" size="xl" radius="sm" h={40} fullWidth>
+                                {profile.gender === 'male' ? 'МУЖЩИНА' : 'ЖЕНСКЩИНА'} • {profile.age} ГОД
+                            </Badge>
+                        </Stack>
+                    </Grid.Col>
+
+                    <Grid.Col span={{ base: 12, md: 8 }} p={40}>
+                        <Stack gap={30}>
+                            <div>
+                                <Title order={4} c="orange.5" mb="xl" fz={18} tt="uppercase" lts={2}>
+                                    Подробности информации
+                                </Title>
+
+                                <Grid gutter="xl">
+                                    <Grid.Col span={6}>
+                                        <InfoBlock icon={Sms} label="Адрес электронной почты" value={profile.email} />
+                                    </Grid.Col>
+                                    <Grid.Col span={6}>
+                                        <InfoBlock icon={Call} label="Номер телефона" value={profile.phone} />
+                                    </Grid.Col>
+                                    <Grid.Col span={6}>
+                                        <InfoBlock icon={Location} label="Расположение" value={`${profile.address.city}, ${profile.address.state}`} />
+                                    </Grid.Col>
+                                    <Grid.Col span={6}>
+                                        <InfoBlock icon={Calendar} label="День рождения" value={profile.birthDate || 'Не указан'} />
+                                    </Grid.Col>
+                                </Grid>
+                            </div>
+
+                            <Divider color="#333" />
+
+                            <Text c="dimmed" fz="xs" ta="right">
+                                Статус аккаунта: <span style={{ color: '#40c057' }}>● Активный</span>
+                            </Text>
+                        </Stack>
+                    </Grid.Col>
+                </Grid>
+            </Paper>
+        </div>
+    );
+};
+
+const InfoBlock = ({ icon: Icon, label, value }: any) => (
+    <Group wrap="nowrap" align="flex-start">
+        <ThemeIcon variant="light" color="orange" size={42} radius="md">
+            <Icon size="22" variant="Broken" />
+        </ThemeIcon>
+        <div>
+            <Text size="xs" c="dimmed" tt="uppercase" fw={700} lts={0.5}>{label}</Text>
+            <Text size="md" c="white" fw={500}>{value}</Text>
+        </div>
+    </Group>
+);

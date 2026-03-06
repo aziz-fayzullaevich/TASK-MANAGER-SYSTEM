@@ -26,7 +26,7 @@ export const CustomPagination = ({
                 />
             </Group>
             <Pagination
-                color="gray"
+                color="orange"
                 radius={"xl"}
                 value={page}
                 onChange={onPageChange}

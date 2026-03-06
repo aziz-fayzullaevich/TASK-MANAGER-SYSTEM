@@ -5,4 +5,4 @@ export type PaginationProps = {
     onPageChange: (page: number) => void;
     onPageSizeChange: (size: number) => void;
     pageSizeOptions?: number[];
-};
+};8

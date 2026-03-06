@@ -1,10 +1,10 @@
 import { ActionIcon, Avatar, Button, Flex, Group, Loader, SegmentedControl, Title } from "@mantine/core";
-import { Global, Moon, Sun1 } from 'iconsax-reactjs';
-import styles from './header.module.css';
+import { Global, Moon, ShoppingCart, Sun1, Task } from 'iconsax-reactjs';
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../shared/constants/routes";
 import { profileQueries } from "../../features/profile/queries/profile-queries";
 import { notifications } from "@mantine/notifications";
+import styles from './header.module.css';
 
 export const Header = () => {
     const navigate = useNavigate();
@@ -18,28 +18,24 @@ export const Header = () => {
         window.location.reload();
     };
 
-    const navLinkStyle = ({ isActive }: { isActive: boolean }) => ({
-    color: isActive ? '#ffa13b' : '#2e2e2e44',
-    textDecoration: 'none',
-    fontWeight:  700,
-    fontSize: '18px',
-    transition: 'all 0.2s ease',
-});
-
     return (
         <header className={styles.header}>
             <div className="container">
                 <Flex className="in-header" align={'center'} justify={'space-between'}>
-                    <Link to={ROUTES.HOME}>
-                        <Title order={3} c="#ff8a65">Task Management System</Title>
+                    <Link to={ROUTES.HOME} className={styles.link}>
+                        <Task
+                            size="32"
+                            color="#FF8A65"
+                        />
+                        <Title order={3} c="dark">Task Management System</Title>
                     </Link>
                     <Group align="center" gap={"md"}>
-                        <NavLink to={ROUTES.PRODUCTS} style={navLinkStyle}>Продукты</NavLink>
-                        <Global
-                            size="20"
-                            color="#ff8a65"
-                            variant="Broken"
-                        />
+                        <NavLink to={ROUTES.PRODUCTS} className={styles.link}>
+                            <ShoppingCart
+                                size="20"
+                                color="#FF8A65"
+                            />
+                        </NavLink>
                         <SegmentedControl
                             withItemsBorders={true}
                             radius="xl"
@@ -59,6 +55,11 @@ export const Header = () => {
                                 }
                             ]}
                         />
+                        <Global
+                            size="20"
+                            color="#ff8a65"
+                            variant="Broken"
+                        />
                         {token ? (
                             <Group gap="sm">
                                 {isLoading ? (
@@ -68,7 +69,7 @@ export const Header = () => {
                                         variant="transparent"
                                         onClick={() => navigate(ROUTES.PROFILE)}
                                     >
-                                        <Avatar radius="xl" color="orange" src={userImage?.image}/>
+                                        <Avatar radius="xl" color="orange" src={userImage?.image} />
                                     </ActionIcon>
                                 )}
                                 <Button variant="subtle" color="red" size="xs" onClick={handleLogout}>
@@ -85,4 +86,4 @@ export const Header = () => {
             </div>
         </header>
     )
-}
+};

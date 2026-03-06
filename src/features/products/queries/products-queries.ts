@@ -5,7 +5,7 @@ export const productsQueries = {
     useFetchProducts: ({ page, pageSize }: { page: number, pageSize: number }) => {
         const skip = (page - 1) * pageSize;
         return useQuery({
-            queryKey: ['products', page, pageSize],
+            queryKey: ['products', skip, pageSize],
             queryFn: () => productsApi.getAll({ skip, limit: pageSize }),
             staleTime: 60_000,
             placeholderData: keepPreviousData

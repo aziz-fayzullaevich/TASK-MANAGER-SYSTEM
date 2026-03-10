@@ -1,5 +1,5 @@
-import { AuthForm } from "../../features/auth/ui/login";
+import Login from "../../features/auth/ui/login";
 
-const Auth = () => <AuthForm />
+const Auth = () => <Login />
 
 export default Auth;

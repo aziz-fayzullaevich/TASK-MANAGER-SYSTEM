@@ -11,11 +11,13 @@ import {
     Divider,
     Grid,
     ThemeIcon,
+    useMantineColorScheme,
 } from "@mantine/core";
 import { profileQueries } from "../queries/profile-queries";
 import { Sms, Call, Location, Calendar } from 'iconsax-reactjs';
 
 export const ProfileList = () => {
+    const { colorScheme } = useMantineColorScheme();
     const { data: profile, isLoading } = profileQueries.useFetchProfile();
 
     if (isLoading) return (
@@ -33,11 +35,9 @@ export const ProfileList = () => {
                 p={0}
                 withBorder
                 style={{
-                    backgroundColor: 'rgba(17, 17, 17, 0.8)',
-                    backdropFilter: 'blur(10px)',
-                    borderColor: '#333',
-                    overflow: 'hidden',
-                    boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+                    backgroundColor: colorScheme === 'dark' ? 'rgba(20, 20, 20, 0.9)' : '#fff',
+                    backdropFilter: 'blur(12px)',
+                    border: `1px solid ${colorScheme === 'dark' ? '#333' : '#eee'}`,
                 }}
             >
                 <Grid gutter={0}>

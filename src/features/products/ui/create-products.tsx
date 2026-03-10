@@ -28,13 +28,11 @@ const CreateProducts = () => {
     };
 
     return (
-        <>
-            <ProductsForm
-                methods={form}
-                onSubmit={onSubmit}
-                isPending={isPending}
-            />
-        </>
+        <ProductsForm
+            methods={form}
+            onSubmit={onSubmit}
+            isPending={isPending}
+        />
     )
 }
 

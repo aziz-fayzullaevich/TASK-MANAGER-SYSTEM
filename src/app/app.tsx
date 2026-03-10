@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { MantineProvider } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { RouterProvider } from 'react-router-dom';
@@ -14,12 +14,13 @@ export const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MantineProvider theme={theme}>
+      <ColorSchemeScript defaultColorScheme="dark" />
+      <MantineProvider theme={theme} defaultColorScheme="dark">
         <Notifications />
         <ModalsProvider>
           <RouterProvider router={router} />
         </ModalsProvider>
       </MantineProvider>
     </QueryClientProvider>
-  )
+  );
 };

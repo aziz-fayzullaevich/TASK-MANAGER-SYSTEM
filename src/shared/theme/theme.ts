@@ -12,48 +12,30 @@ export const theme = createTheme({
   },
 
   defaultRadius: 'md',
-  fontFamily: 'Inter, system-ui, sans-serif',
 
   components: {
-    Button: {
-      defaultProps: {
-        variant: 'filled',
-      },
-      styles: () => ({
-        root: {
-          transition: 'transform 0.15s ease, background-color 0.2s ease',
-          '&:active': { transform: 'scale(0.96)' },
-        },
-      }),
-    },
-    TextInput: {
-      styles: {
-        input: {
-          border: '1px solid #333',
-          backgroundColor: '#1a1a1a',
-          color: '#eee',
-          '&:focus': { borderColor: '#ff931f' },
-        },
-        label: { marginBottom: 5, fontWeight: 500 },
-      },
-    },
-    PasswordInput: {
-      styles: {
-        input: { backgroundColor: '#1a1a1a', border: '1px solid #333', color: '#eee' },
-      },
-    },
     Paper: {
-      defaultProps: {
-        p: 'xl',
-        shadow: 'xl',
-        withBorder: true,
-      },
-      styles: {
+      defaultProps: { withBorder: true, shadow: 'md' },
+      styles: (theme: any) => ({
         root: {
-          backgroundColor: '#111',
-          borderColor: '#333',
-        },
-      },
+          backgroundColor: theme.colorScheme === 'dark' ? '#141414' : '#fff',
+          borderColor: `${myOrange[4]}`,
+        }
+      })
     },
-  },
+
+    Button: {
+      styles: {
+        root: { transition: 'all 0.2s ease' }
+      }
+    },
+
+    TextInput: {
+      styles: (theme: any) => ({
+        input: {
+          '&:focus': { borderColor: theme.colors.orange[5] }
+        }
+      })
+    },
+  }
 });

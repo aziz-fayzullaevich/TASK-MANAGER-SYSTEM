@@ -2,6 +2,7 @@
   box-sizing: border-box;
   text-decoration: none;
   list-style: none;
+  user-select: none;
 }
 
 body {
@@ -21,20 +22,24 @@ body {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #0a0a0a;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #333;
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #ffa13b;
 }
 
 .mantine-Paper-root {
-    transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
+
 .mantine-Paper-root:hover {
-    border-color: #444;
+  border-color: #444;
 }

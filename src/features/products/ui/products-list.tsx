@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { productsQueries } from "../queries/products-queries";
 import type { Column } from "../../../shared/configs/types/table-types";
 import type { Products } from "../types/products-types";
-import { AddSquare, Edit, MinusSquare, TrushSquare } from "iconsax-reactjs";
+import { AddSquare, Edit, TrushSquare } from "iconsax-reactjs";
 import { modals } from "@mantine/modals";
+import { ROUTES } from "../../../shared/constants/routes";
 
 export const ProductsList = () => {
     const [page, setPage] = useState(1);
@@ -14,8 +15,9 @@ export const ProductsList = () => {
     const navigate = useNavigate();
 
     const { data, isLoading } = productsQueries.useFetchProducts({ page, pageSize });
+    const { mutate: deleteProduct } = productsQueries.useDeleteProduct();
 
-    const handleDelete = () => modals.openConfirmModal({
+    const handleDelete = (id: number) => modals.openConfirmModal({
         title: 'Удаление товара',
         children: (
             <Text size="sm" >
@@ -23,7 +25,8 @@ export const ProductsList = () => {
             </Text>
         ),
         labels: { confirm: 'Удалить', cancel: 'Назад' },
-        confirmProps: { color: 'red' }
+        confirmProps: { color: 'red' },
+        onConfirm: () => deleteProduct({ id })
     });
 
     const columns: Column<Products>[] = [
@@ -66,7 +69,7 @@ export const ProductsList = () => {
                 <Title
                     order={6}
                     c={'orange'}>
-                    {item.price.toFixed()}$
+                    {item.price ? item.price.toFixed(2) : null}$
                 </Title>
             )
         },
@@ -74,9 +77,9 @@ export const ProductsList = () => {
             header: 'Рейтинг',
             accessor: item => (
                 <Rating
-                    value={item.rating}
+                    value={Number(item.rating)}
                     size={"xs"}
-                    count={item.rating}
+                    count={Number(item.rating)}
                     readOnly
                 />
             )
@@ -85,10 +88,11 @@ export const ProductsList = () => {
             header: '',
             accessor: item => (
                 <Flex align={'center'} gap={"md"}>
-                    <ActionIcon>
+                    <ActionIcon
+                        onClick={() => navigate(`/update-product/${item.id}`)}>
                         <Edit />
                     </ActionIcon>
-                    <ActionIcon bg={'red'} onClick={handleDelete}>
+                    <ActionIcon bg={'red'} onClick={() => handleDelete(item.id)}>
                         <TrushSquare />
                     </ActionIcon>
                 </Flex>
@@ -101,24 +105,24 @@ export const ProductsList = () => {
             <Stack>
                 <Flex align={'center'} justify={'space-between'}>
                     <Title order={3} c={'orange'}>Продукты</Title>
-                    <Button leftSection={<AddSquare />}>Создать</Button>
+                    <Button
+                        leftSection={<AddSquare />}
+                        onClick={() => navigate(`/${ROUTES.CREATE_PRODUCT}`)}>Создать</Button>
                 </Flex>
                 <CustomTable
                     column={columns}
-                    data={data?.products}
+                    data={data?.products || []}
                     loading={isLoading}
-                    pagination={
-                        data?.products && {
-                            page,
-                            pageSize,
-                            total: data.total,
-                            onPageChange: setPage,
-                            onPageSizeChange: (size) => {
-                                setPageSize(size);
-                                setPage(1);
-                            }
+                    pagination={{
+                        page: page,
+                        pageSize: pageSize,
+                        total: data?.total || 0,
+                        onPageChange: (newPage) => setPage(newPage),
+                        onPageSizeChange: (size) => {
+                            setPageSize(size);
+                            setPage(1);
                         }
-                    }
+                    }}
                 />
             </Stack>
         </div>

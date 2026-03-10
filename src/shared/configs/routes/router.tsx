@@ -7,6 +7,8 @@ import Register from "../../../features/auth/ui/register";
 import Login from "../../../features/auth/ui/login";
 import { ProtectedRoute } from "../../ui/protected-route";
 import Home from "../../../pages/home/home";
+import CreateProducts from "../../../features/products/ui/create-products";
+import UpdateProducts from "../../../features/products/ui/update-products";
 
 export const router = createBrowserRouter([
     {
@@ -24,6 +26,14 @@ export const router = createBrowserRouter([
                         <Products />
                     </ProtectedRoute>
                 ),
+            },
+            {
+                path: ROUTES.CREATE_PRODUCT,
+                element: <CreateProducts />
+            },
+            {
+                path: ROUTES.UPDATE_PRODUCT,
+                element: <UpdateProducts />
             },
             {
                 path: ROUTES.PROFILE,

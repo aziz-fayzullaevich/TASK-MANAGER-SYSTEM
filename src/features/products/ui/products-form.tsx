@@ -16,10 +16,11 @@ import {
 import { Controller, type FieldValues, type UseFormReturn } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../shared/constants/routes";
-import { categoryOptions } from "../../../shared/constants/category-options";
-import { brandOptions } from "../../../shared/constants/brandOptions";
+import { categoryKeys } from "../../../shared/constants/category-keys";
+import { brandOptions } from "../../../shared/constants/brand-options";
 import type { Products } from "../types/products-types";
 import { ArrowLeft2, DirectboxSend } from "iconsax-reactjs";
+import { useTranslation } from "react-i18next";
 
 export type FormProps<T extends FieldValues> = {
     methods: UseFormReturn<T>;
@@ -29,8 +30,14 @@ export type FormProps<T extends FieldValues> = {
 
 export const ProductsForm = ({ methods, onSubmit, isPending }: FormProps<Partial<Products>>) => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const theme = useMantineTheme();
     const { register, formState: { errors }, handleSubmit, control } = methods;
+
+    const categoryOptions = categoryKeys.map((key) => ({
+        label: t(`category.${key}`),
+        value: key
+    }));
 
     return (
         <div className="container">
@@ -49,8 +56,8 @@ export const ProductsForm = ({ methods, onSubmit, isPending }: FormProps<Partial
                     >
                         <Flex justify="space-between" align="center" mb="lg">
                             <Box>
-                                <Title order={2} c={theme.colors.orange[5]}>Товар</Title>
-                                <Text c="dimmed" fz="sm">Заполните данные для создания или обновления товара</Text>
+                                <Title order={2} c={theme.colors.orange[5]}>{t('form.goods')}</Title>
+                                <Text c="dimmed" fz="sm">{t('form.req-desc')}</Text>
                             </Box>
                             <DirectboxSend size="42" color={theme.colors.orange[6]} variant="Bulk" />
                         </Flex>
@@ -58,30 +65,30 @@ export const ProductsForm = ({ methods, onSubmit, isPending }: FormProps<Partial
                         <Grid gutter="xl">
                             <Grid.Col span={{ base: 12, md: 6 }}>
                                 <TextInput
-                                    label="Название"
-                                    placeholder="Например: iPhone 15 Pro"
+                                    label={t('table.title')}
+                                    placeholder={t('form.placeholder-title')}
                                     withAsterisk
                                     size="md"
-                                    {...register('title', { required: 'Обязательное поле!' })}
+                                    {...register('title', { required: `${t('auth.required-filed')}` })}
                                     error={errors.title?.message}
                                 />
                             </Grid.Col>
 
                             <Grid.Col span={{ base: 12, md: 6 }}>
                                 <Controller
-                                    name="price"
+                                    name='price'
                                     control={control}
-                                    rules={{ required: 'Обязательное поле!' }}
+                                    rules={{ required: `${t('auth.required-filed')}` }}
                                     render={({ field }) => (
                                         <NumberInput
-                                            {...field}
-                                            label="Цена ($)"
-                                            placeholder="0.00"
+                                            label={t('table.price')}
+                                            placeholder="0.00 $"
                                             withAsterisk
                                             size="md"
                                             prefix="$ "
                                             hideControls
                                             error={errors.price?.message}
+                                            {...field}
                                         />
                                     )}
                                 />
@@ -89,12 +96,12 @@ export const ProductsForm = ({ methods, onSubmit, isPending }: FormProps<Partial
 
                             <Grid.Col span={12}>
                                 <Textarea
-                                    label="Описание"
-                                    placeholder="Детальное описание технических характеристик..."
+                                    label={t('table.desc')}
+                                    placeholder={t('form.placeholder-desc')}
                                     withAsterisk
                                     size="md"
                                     minRows={3}
-                                    {...register('description', { required: 'Обязательное поле!' })}
+                                    {...register('description', { required: `${t('auth.required-filed')}` })}
                                     error={errors.description?.message}
                                 />
                             </Grid.Col>
@@ -103,14 +110,15 @@ export const ProductsForm = ({ methods, onSubmit, isPending }: FormProps<Partial
                                 <Controller
                                     name="category"
                                     control={control}
-                                    rules={{ required: 'Обязательное поле!' }}
+                                    rules={{ required: `${t('auth.required-filed')}` }}
                                     render={({ field }) => (
                                         <Select
                                             {...field}
-                                            label="Категория"
+                                            label={t('table.category')}
                                             data={categoryOptions}
-                                            placeholder="Выберите категорию"
+                                            placeholder={t('form.choose-category')}
                                             withAsterisk
+                                            clearable
                                             size="md"
                                             searchable
                                             error={errors.category?.message}
@@ -123,14 +131,15 @@ export const ProductsForm = ({ methods, onSubmit, isPending }: FormProps<Partial
                                 <Controller
                                     name="brand"
                                     control={control}
-                                    rules={{ required: 'Обязательное поле!' }}
+                                    rules={{ required: `${t('auth.required-filed')}` }}
                                     render={({ field }) => (
                                         <Select
                                             {...field}
-                                            label="Бренд"
+                                            label={t('table.brand')}
                                             data={brandOptions}
-                                            placeholder="Выберите бренд"
+                                            placeholder={t('form.choose-brand')}
                                             withAsterisk
+                                            clearable
                                             size="md"
                                             searchable
                                             error={errors.brand?.message}
@@ -139,7 +148,6 @@ export const ProductsForm = ({ methods, onSubmit, isPending }: FormProps<Partial
                                 />
                             </Grid.Col>
 
-                            {/* Кнопки действий */}
                             <Grid.Col span={12} mt="xl">
                                 <Flex justify="space-between" align="center">
                                     <Button
@@ -149,7 +157,7 @@ export const ProductsForm = ({ methods, onSubmit, isPending }: FormProps<Partial
                                         leftSection={<ArrowLeft2 size="20" />}
                                         onClick={() => navigate(ROUTES.PRODUCTS)}
                                     >
-                                        Вернуться к списку
+                                        {t('form.back-to-lists')}
                                     </Button>
 
                                     <Group gap="md">
@@ -159,7 +167,7 @@ export const ProductsForm = ({ methods, onSubmit, isPending }: FormProps<Partial
                                             size="md"
                                             onClick={() => methods.reset()}
                                         >
-                                            Очистить
+                                            {t('form.clear')}
                                         </Button>
                                         <Button
                                             type="submit"
@@ -168,7 +176,7 @@ export const ProductsForm = ({ methods, onSubmit, isPending }: FormProps<Partial
                                             color="orange.6"
                                             px={40}
                                         >
-                                            Сохранить товар
+                                            {t('form.save')}
                                         </Button>
                                     </Group>
                                 </Flex>

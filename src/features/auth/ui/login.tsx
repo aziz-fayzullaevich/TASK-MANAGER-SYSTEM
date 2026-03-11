@@ -4,9 +4,11 @@ import { useForm } from 'react-hook-form'
 import type { User } from "../types/auth-types";
 import { ROUTES } from "../../../shared/constants/routes";
 import { authQueries } from "../queries/auth-queries";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { register, handleSubmit, formState: { errors }, reset } = useForm<User>();
     const { mutate: loginUser, isPending } = authQueries.useLogin();
 
@@ -31,34 +33,34 @@ const Login = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Stack gap="lg">
                             <Title order={2} ta="center" c="orange.5">
-                                Авторизация
+                                {t('auth.authorization')}
                             </Title>
 
                             <TextInput
-                                label="Имя"
-                                placeholder="Введите имя"
-                                {...register('username', { required: 'обязательное поле' })}
+                                label={t('auth.name')}
+                                placeholder={t('auth.placeholder-name')}
+                                {...register('username', { required: `${t('auth.required-filed')}` })}
                                 error={errors.username?.message}
                             />
 
                             <PasswordInput
-                                label="Пароль"
+                                label={t('auth.password')}
                                 placeholder="********"
-                                {...register('password', { required: 'обязательное поле' })}
+                                {...register('password', { required: `${t('auth.required-filed')}` })}
                                 error={errors.password?.message}
                             />
 
                             <Stack gap="sm" mt="md">
                                 <Button fullWidth size="md" color="orange.6" type="submit" loading={isPending}>
-                                    Войти
+                                    {t('main.login')}
                                 </Button>
 
                                 <Group align="center" justify="space-between" mt={"md"}>
                                     <Button variant="subtle" color="gray" size="xs" onClick={() => navigate(ROUTES.HOME)}>
-                                        Назад на главную
+                                        {t('auth.back-to-main')}
                                     </Button>
                                     <Button variant="subtle" color="gray" size="xs" onClick={() => navigate(ROUTES.REGISTER)} >
-                                        Зарегистрировать
+                                        {t('auth.register')}
                                     </Button>
                                 </Group>
                             </Stack>

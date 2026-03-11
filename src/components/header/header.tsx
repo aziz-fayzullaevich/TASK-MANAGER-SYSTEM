@@ -1,21 +1,27 @@
-import { ActionIcon, Avatar, Button, Flex, Group, SegmentedControl, Title } from "@mantine/core";
+import { ActionIcon, Avatar, Button, Flex, Group, SegmentedControl, Select, Title } from "@mantine/core";
 import { Global, Moon, ShoppingCart, Sun1, Task } from 'iconsax-reactjs';
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../shared/constants/routes";
-import { profileQueries } from "../../features/profile/queries/profile-queries";
 import { notifications } from "@mantine/notifications";
 import { useMantineColorScheme, useMantineTheme } from '@mantine/core';
 import styles from './header.module.css';
+import { useTranslation } from "react-i18next";
 
 export const Header = () => {
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
-    const { data: userImage } = profileQueries.useFetchProfile(!!token);
     const { colorScheme, setColorScheme } = useMantineColorScheme();
     const theme = useMantineTheme();
+    const { t, i18n } = useTranslation();
+
+    const changeLanguage = (lng: string | null) => {
+        if (lng) {
+            i18n.changeLanguage(lng);
+        };
+    };
 
     const handleLogout = () => {
-        notifications.show({ title: 'Успех', message: 'Вы вышли!', color: 'green' });
+        notifications.show({ title: `${t('notifications.success')}`, message: `${t('notifications.logout-suc')}`, color: 'green' });
         localStorage.removeItem('token');
         navigate(ROUTES.LOGIN);
         window.location.reload();
@@ -54,28 +60,39 @@ export const Header = () => {
                             radius="xl"
                         />
 
-                        <Global
-                            size="20"
-                            color="#ff8a65"
-                            variant="Broken"
+
+                        <Select
+                            leftSection={<Global
+                                size="20"
+                                color="#ff8a65"
+                                variant="Broken"
+                            />}
+                            w={120}
+                            placeholder={t('main.lang')}
+                            value={i18n.language}
+                            data={[
+                                { label: "Kar", value: "kar" },
+                                { label: "Ru", value: "ru" },
+                                { label: "Eng", value: "en" },
+                                { label: "Uzb", value: "uz" },
+                            ]}
+                            onChange={changeLanguage}
+                            allowDeselect={false}
                         />
 
                         {token ? (
                             <Group gap="sm">
                                 <Avatar
-                                    src={userImage?.image}
                                     radius="xl"
                                     color="orange"
-                                    style={{ cursor: 'pointer', border: `2px solid ${theme.colors.orange[5]}` }}
+                                    style={{ cursor: 'pointer' }}
                                     onClick={() => navigate(ROUTES.PROFILE)}
                                 />
-                                <Button variant="outline" color="red" size="compact-sm" onClick={handleLogout}>
-                                    Выйти
-                                </Button>
+                                <Button variant="outline" color="red" size="compact-sm" onClick={handleLogout}>{t('main.logout')}</Button>
                             </Group>
                         ) : (
                             <Button variant="outline" onClick={() => navigate(ROUTES.LOGIN)}>
-                                Войти
+                                {t('main.login')}
                             </Button>
                         )}
                     </Group>

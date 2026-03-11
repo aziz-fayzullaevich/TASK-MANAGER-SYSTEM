@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form'
 import type { User } from "../types/auth-types";
 import { ROUTES } from "../../../shared/constants/routes";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
     const navigate = useNavigate();
+    const {t} = useTranslation();
     const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
     const onSubmit = () => { };
@@ -26,36 +28,36 @@ const Register = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Stack gap="lg">
                             <Title order={2} ta="center" c="orange.5">
-                                Регистрация
+                              {t('auth.register')}
                             </Title>
 
                             <TextInput
-                                label="Имя"
-                                placeholder="Введите имя"
-                                {...register('username', { required: 'обязательное поле' })}
+                                label={t('auth.name')}
+                                placeholder={t('auth.placeholder-name')}
+                                {...register('username', { required: `${t('auth.required-filed')}` })}
                                 error={errors.username?.message}
                             />
 
                             <TextInput
                                 label="E-mail"
                                 placeholder="exmaple@gmail.com"
-                                {...register('email', { required: 'обязательное поле' })}
+                                {...register('email', { required: `${t('auth.required-filed')}` })}
                                 error={errors.email?.message}
                             />
 
                             <PasswordInput
-                                label="Пароль"
+                                label={t('auth.password')}
                                 placeholder="********"
-                                {...register('password', { required: 'обязательное поле' })}
+                                {...register('password', { required: `${t('auth.required-filed')}` })}
                                 error={errors.password?.message}
                             />
 
                             <Stack gap="sm" mt="md">
                                 <Button fullWidth size="md" color="orange.6" type="submit">
-                                    Зарегистрировать
+                                    {t('auth.register')}
                                 </Button>
                                 <Button variant="subtle" color="gray" size="xs" onClick={() => navigate(ROUTES.HOME)}>
-                                    Назад на главную
+                                    {t('auth.back-to-main')}
                                 </Button>
                             </Stack>
                         </Stack>

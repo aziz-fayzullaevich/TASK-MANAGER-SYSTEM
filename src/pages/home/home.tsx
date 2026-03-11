@@ -10,9 +10,11 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Star1 } from 'iconsax-reactjs';
 import '@mantine/carousel/styles.css';
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     return (
         <div className='container'>
@@ -24,7 +26,7 @@ const Home = () => {
                     radius="sm"
                     leftSection={<Star1 size={14} variant="Bold" />}
                 >
-                    NEW VERSION 3.0
+                    {t('main.new-version')} 3.0
                 </Badge>
 
                 <Title
@@ -46,8 +48,7 @@ const Home = () => {
                 </Title>
 
                 <Text c="dimmed" ta="center" fz="xl" maw={600}>
-                    Профессиональная система управления продуктами. Чистый код,
-                    высокая производительность и безупречный темный интерфейс.
+             {t('main.home-desc')}
                 </Text>
 
                 <Group gap="md">
@@ -57,7 +58,7 @@ const Home = () => {
                         onClick={() => navigate('/products')}
                         rightSection={<ArrowRight size={20} />}
                     >
-                        Перейти к продуктам
+                        {t('main.get-to-products')}
                     </Button>
                 </Group>
             </Stack>

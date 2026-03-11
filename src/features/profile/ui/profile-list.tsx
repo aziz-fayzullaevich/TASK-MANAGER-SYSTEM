@@ -15,17 +15,19 @@ import {
 } from "@mantine/core";
 import { profileQueries } from "../queries/profile-queries";
 import { Sms, Call, Location, Calendar } from 'iconsax-reactjs';
+import { useTranslation } from "react-i18next";
 
 export const ProfileList = () => {
     const { colorScheme } = useMantineColorScheme();
     const { data: profile, isLoading } = profileQueries.useFetchProfile();
+    const {t} = useTranslation();
 
     if (isLoading) return (
         <Center h="70vh"><Stack align="center"><Loader color="orange" size="xl" type="bars" /></Stack></Center>
     );
 
     if (!profile) return (
-        <Center h="70vh"><Text c="red" fz="xl" fw={700}>Профиль не найден</Text></Center>
+        <Center h="70vh"><Text c="red" fz="xl" fw={700}>{t('profile.empty-profile')}</Text></Center>
     );
 
     return (
@@ -66,11 +68,11 @@ export const ProfileList = () => {
 
                             <Stack gap={5} align="center">
                                 <Title order={2} c="white" fz={28} fw={800}>{profile.username}</Title>
-                                <Text c="dimmed" fz="sm" tt="uppercase" lts={1}>Личный профиль</Text>
+                                <Text c="dimmed" fz="sm" tt="uppercase" lts={1}>{t('profile.personal-profile')}</Text>
                             </Stack>
 
                             <Badge color="orange" variant="outline" size="xl" radius="sm" h={40} fullWidth>
-                                {profile.gender === 'male' ? 'МУЖЩИНА' : 'ЖЕНСКЩИНА'} • {profile.age} ГОД
+                                {profile.gender === 'male' ? `${t('profile.male')}` : `${t('profile.female')}`} • {profile.age} {t('profile.y-o')}
                             </Badge>
                         </Stack>
                     </Grid.Col>
@@ -79,21 +81,21 @@ export const ProfileList = () => {
                         <Stack gap={30}>
                             <div>
                                 <Title order={4} c="orange.5" mb="xl" fz={18} tt="uppercase" lts={2}>
-                                    Подробности информации
+                                  {t('profile.details-info')}
                                 </Title>
 
                                 <Grid gutter="xl">
                                     <Grid.Col span={6}>
-                                        <InfoBlock icon={Sms} label="Адрес электронной почты" value={profile.email} />
+                                        <InfoBlock icon={Sms} label={t('profile.email-address')} value={profile.email} />
                                     </Grid.Col>
                                     <Grid.Col span={6}>
-                                        <InfoBlock icon={Call} label="Номер телефона" value={profile.phone} />
+                                        <InfoBlock icon={Call} label={t('profile.phone-number')} value={profile.phone} />
                                     </Grid.Col>
                                     <Grid.Col span={6}>
-                                        <InfoBlock icon={Location} label="Расположение" value={`${profile.address.city}, ${profile.address.state}`} />
+                                        <InfoBlock icon={Location} label={t('profile.location')} value={`${profile.address.city}, ${profile.address.state}`} />
                                     </Grid.Col>
                                     <Grid.Col span={6}>
-                                        <InfoBlock icon={Calendar} label="День рождения" value={profile.birthDate || 'Не указан'} />
+                                        <InfoBlock icon={Calendar} label={t('profile.date-bd')} value={profile.birthDate || `${t('profile.not-specified')}`} />
                                     </Grid.Col>
                                 </Grid>
                             </div>
@@ -101,7 +103,7 @@ export const ProfileList = () => {
                             <Divider color="#333" />
 
                             <Text c="dimmed" fz="xs" ta="right">
-                                Статус аккаунта: <span style={{ color: '#40c057' }}>● Активный</span>
+                                {t('profile.account-status')} <span style={{ color: '#40c057' }}>● {t('profile.active')}</span>
                             </Text>
                         </Stack>
                     </Grid.Col>

@@ -8,23 +8,25 @@ import type { Products } from "../types/products-types";
 import { AddSquare, Edit, TrushSquare } from "iconsax-reactjs";
 import { modals } from "@mantine/modals";
 import { ROUTES } from "../../../shared/constants/routes";
+import { useTranslation } from "react-i18next";
 
 export const ProductsList = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(5);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const { data, isLoading } = productsQueries.useFetchProducts({ page, pageSize });
     const { mutate: deleteProduct } = productsQueries.useDeleteProduct();
 
     const handleDelete = (id: number) => modals.openConfirmModal({
-        title: 'Удаление товара',
+        title: `${t('notifications.delete-title')}`,
         children: (
             <Text size="sm" >
-                Вы действительно хотите удалить товар?
+                {t('notifications.delete-desc')}
             </Text>
         ),
-        labels: { confirm: 'Удалить', cancel: 'Назад' },
+        labels: { confirm: `${t('main.delete')}`, cancel: `${t('main.cancel')}` },
         confirmProps: { color: 'red' },
         onConfirm: () => deleteProduct({ id })
     });
@@ -35,15 +37,15 @@ export const ProductsList = () => {
             accessor: 'id'
         },
         {
-            header: 'Название',
+            header: `${t('table.title')}`,
             accessor: 'title'
         },
         {
-            header: 'Описание',
+            header: `${t('table.desc')}`,
             accessor: 'description'
         },
         {
-            header: 'Изображение',
+            header: `${t('table.image')}`,
             accessor: item => (
                 <Image
                     src={item.images[1]}
@@ -54,17 +56,17 @@ export const ProductsList = () => {
             )
         },
         {
-            header: 'Бренд',
+            header: `${t('table.brand')}`,
             accessor: 'brand'
         },
         {
-            header: 'Категория',
+            header: `${t('table.category')}`,
             accessor: item => (
-                <Badge>{item.category}</Badge>
+                <Badge>{t(`category.${item.category}`)}</Badge>
             )
         },
         {
-            header: 'Цена',
+            header: `${t('table.price')}`,
             accessor: item => (
                 <Title
                     order={6}
@@ -74,7 +76,7 @@ export const ProductsList = () => {
             )
         },
         {
-            header: 'Рейтинг',
+            header: `${t('table.rating')}`,
             accessor: item => (
                 <Rating
                     value={Number(item.rating)}
@@ -104,10 +106,10 @@ export const ProductsList = () => {
         <div className="container">
             <Stack>
                 <Flex align={'center'} justify={'space-between'}>
-                    <Title order={3} c={'orange'}>Продукты</Title>
+                    <Title order={3} c={'orange'}>{t('main.products')}</Title>
                     <Button
                         leftSection={<AddSquare />}
-                        onClick={() => navigate(`/${ROUTES.CREATE_PRODUCT}`)}>Создать</Button>
+                        onClick={() => navigate(`/${ROUTES.CREATE_PRODUCT}`)}>{t('main.create')}</Button>
                 </Flex>
                 <CustomTable
                     column={columns}

@@ -6,6 +6,7 @@ import { productsQueries } from "../queries/products-queries";
 
 const CreateProducts = () => {
     const navigate = useNavigate();
+
     const { mutate: createProduct, isPending } = productsQueries.useCreateProduct();
 
     const form = useForm<Partial<Products>>({

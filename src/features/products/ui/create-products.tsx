@@ -14,7 +14,7 @@ const CreateProducts = () => {
             title: '',
             description: '',
             category: '',
-            price: null,
+            price: 0,
             brand: '',
         }
     });
